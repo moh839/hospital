@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediReceipt - Outpatient Billing</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <link rel="stylesheet" href="app.css" />
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .receipt { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+
+<div class="flex h-screen">
+
+  <!-- Sidebar -->
+  <div class="w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-800">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl">M</div>
+        <div>
+          <h1 class="text-2xl font-bold text-teal-600">MediReceipt</h1>
+          <p class="text-xs text-gray-500">City General Hospital</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="flex-1 p-4">
+      <a href="#" onclick="showScreen(0)" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-teal-600 bg-teal-50 dark:bg-teal-950 mb-1">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="#" onclick="showScreen(1)" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 mb-1">
+        <i class="fa-solid fa-file-invoice"></i>
+        <span class="font-medium">New Receipt</span>
+      </a>
+      <a href="#" onclick="showScreen(2)" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 mb-1">
+        <i class="fa-solid fa-users"></i>
+        <span class="font-medium">Patient Records</span>
+      </a>
+      <a href="#" onclick="showScreen(3)" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
+        <i class="fa-solid fa-chart-bar"></i>
+        <span class="font-medium">Reports</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-gray-200 dark:border-gray-800">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+        <div>
+          <p class="font-medium text-sm">Dr. Priya Sharma</p>
+          <p class="text-xs text-gray-500">Receptionist</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- Top Bar -->
+    <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-8 py-4 flex items-center justify-between">
+      <h2 id="screen-title" class="text-2xl font-semibold">Dashboard</h2>
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-calendar-day"></i>
+          <span id="current-date"></span>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="toggleDarkMode()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <div class="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+            <i class="fa-solid fa-bell"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Screens -->
+    <div id="screens" class="flex-1 overflow-auto p-8">
+
+      <!-- Screen 0: Dashboard -->
+      <div id="screen-0" class="screen">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-gray-500 text-sm">Patients Today</p>
+                <p class="text-4xl font-bold mt-2">142</p>
+              </div>
+              <div class="text-teal-600 text-3xl"><i class="fa-solid fa-users"></i></div>
+            </div>
+            <p class="text-emerald-600 text-sm mt-4">↑ 18% from yesterday</p>
+          </div>
+
+          <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-gray-500 text-sm">Total Revenue</p>
+                <p class="text-4xl font-bold mt-2">₹48,750</p>
+              </div>
+              <div class="text-teal-600 text-3xl"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+            </div>
+            <p class="text-emerald-600 text-sm mt-4">↑ 12% from yesterday</p>
+          </div>
+
+          <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-gray-500 text-sm">Pending Payments</p>
+                <p class="text-4xl font-bold mt-2 text-orange-600">₹8,450</p>
+              </div>
+              <div class="text-orange-600 text-3xl"><i class="fa-solid fa-clock"></i></div>
+            </div>
+            <p class="text-orange-600 text-sm mt-4">12 patients</p>
+          </div>
+        </div>
+
+        <h3 class="text-xl font-semibold mb-4">Today's Transactions</h3>
+        <div class="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800">
+          <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-medium">Receipt ID</th>
+                <th class="px-6 py-4 text-left text-sm font-medium">Patient Name</th>
+                <th class="px-6 py-4 text-left text-sm font-medium">Amount</th>
+                <th class="px-6 py-4 text-left text-sm font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                <td class="px-6 py-4">MR-20260406-089</td>
+                <td class="px-6 py-4">Rahul Verma</td>
+                <td class="px-6 py-4 font-medium">₹850</td>
+                <td class="px-6 py-4"><span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs">Paid</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Screen 1: New Receipt -->
+      <div id="screen-1" class="screen hidden">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 p-8">
+
+          <h2 class="text-2xl font-semibold mb-8 flex items-center gap-3">
+            <i class="fa-solid fa-file-invoice text-teal-600"></i> New Outpatient Receipt
+          </h2>
+
+          <div class="grid grid-cols-2 gap-8">
+            <!-- Patient Details -->
+            <div>
+              <h3 class="font-semibold text-lg mb-4">Patient Details</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Patient Name</label>
+                  <input id="patient-name" type="text" class="w-full border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500" placeholder="Enter patient name"/>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Age</label>
+                    <input id="patient-age" type="number" class="w-full border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500" placeholder="Age"/>
+                  </div>
+                  <div>
+                    <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Gender</label>
+                    <select id="patient-gender" class="w-full border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500">
+                      <option>Male</option>
+                      <option>Female</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Phone Number</label>
+                  <input id="patient-phone" type="tel" class="w-full border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500" placeholder="9876543210"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Doctor & Services -->
+            <div>
+              <h3 class="font-semibold text-lg mb-4">Doctor & Services</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm text-gray-600 dark:text-gray-400 mb-1">Doctor / Department</label>
+                  <select id="doctor" class="w-full border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:border-teal-500">
+                    <option>Dr. Priya Sharma - General Medicine</option>
+                    <option>Dr. Arjun Rao - Cardiology</option>
+                    <option>Dr. Meena Gupta - Pediatrics</option>
+                  </select>
+                </div>
+
+                <!-- Services -->
+                <div id="services-container">
+                  <div class="service-row flex gap-3 mb-3">
+                    <input type="text" class="flex-1 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3" placeholder="Service (e.g. Consultation)" value="Consultation Fee"/>
+                    <input type="number" class="w-32 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 text-right" value="500" onchange="calculateTotal()"/>
+                    <button onclick="removeService(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </div>
+
+                <button onclick="addServiceRow()" class="text-teal-600 hover:text-teal-700 font-medium flex items-center gap-2">
+                  <i class="fa-solid fa-plus"></i> Add Service
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment -->
+          <div class="mt-10 border-t border-gray-200 dark:border-gray-700 pt-8">
+            <div class="flex justify-between items-end">
+              <div>
+                <label class="block text-sm text-gray-600 dark:text-gray-400 mb-2">Payment Mode</label>
+                <div class="flex gap-3">
+                  <button onclick="selectPayment(this)" class="payment-btn active px-6 py-3 border-2 border-teal-600 text-teal-600 rounded-2xl">Cash</button>
+                  <button onclick="selectPayment(this)" class="payment-btn px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-2xl">UPI</button>
+                  <button onclick="selectPayment(this)" class="payment-btn px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-2xl">Card</button>
+                </div>
+              </div>
+
+              <div class="text-right">
+                <p class="text-gray-500">Total Amount</p>
+                <p id="total-amount" class="text-4xl font-bold text-teal-600">₹500</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-10 flex gap-4">
+            <button onclick="generateReceipt()" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-2xl text-lg">
+              Generate Receipt
+            </button>
+            <button onclick="clearForm()" class="flex-1 border border-gray-300 dark:border-gray-700 font-semibold py-4 rounded-2xl text-lg">
+              Clear Form
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Patient Records -->
+      <div id="screen-2" class="screen hidden">
+        <div class="max-w-6xl mx-auto">
+          <div class="flex justify-between mb-6">
+            <input id="search-input" type="text" placeholder="Search by name or receipt ID..." 
+                   class="w-96 border border-gray-300 dark:border-gray-700 rounded-2xl px-6 py-3 focus:outline-none focus:border-teal-500"/>
+            <select class="border border-gray-300 dark:border-gray-700 rounded-2xl px-6 py-3 focus:outline-none">
+              <option>All Records</option>
+              <option>Today</option>
+              <option>Last 7 Days</option>
+            </select>
+          </div>
+
+          <div class="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800">
+            <table class="w-full">
+              <thead class="bg-gray-50 dark:bg-gray-800">
+                <tr>
+                  <th class="px-6 py-5 text-left">Receipt ID</th>
+                  <th class="px-6 py-5 text-left">Patient Name</th>
+                  <th class="px-6 py-5 text-left">Date</th>
+                  <th class="px-6 py-5 text-left">Amount</th>
+                  <th class="px-6 py-5 text-left">Status</th>
+                  <th class="px-6 py-5 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="records-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 3: Reports (Placeholder) -->
+      <div id="screen-3" class="screen hidden">
+        <div class="max-w-4xl mx-auto text-center py-20">
+          <h2 class="text-3xl font-semibold mb-4">Daily / Monthly Reports</h2>
+          <p class="text-gray-500">This section will show detailed analytics, export options, and summaries.</p>
+          <div class="mt-12 text-6xl opacity-20">📊</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Receipt Preview Modal -->
+<div id="receipt-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-gray-900 rounded-3xl receipt max-w-md w-full overflow-hidden">
+    <div class="p-8" id="receipt-content">
+      <!-- Receipt content will be injected by JS -->
+    </div>
+    <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex gap-3">
+      <button onclick="printReceipt()" class="flex-1 bg-teal-600 text-white py-3 rounded-2xl font-medium">Print</button>
+      <button onclick="closeModal()" class="flex-1 border border-gray-300 dark:border-gray-700 py-3 rounded-2xl font-medium">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tailwind script already included via CDN
+
+  function showScreen(n) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById(`screen-${n}`).classList.remove('hidden');
+    document.getElementById('screen-title').textContent = 
+      n === 0 ? 'Dashboard' : 
+      n === 1 ? 'New Receipt' : 
+      n === 2 ? 'Patient Records' : 'Reports';
+  }
+
+  function calculateTotal() {
+    let total = 0;
+    document.querySelectorAll('.service-row input[type="number"]').forEach(inp => {
+      total += parseFloat(inp.value) || 0;
+    });
+    document.getElementById('total-amount').textContent = `₹${total}`;
+  }
+
+  function addServiceRow() {
+    const container = document.getElementById('services-container');
+    const row = document.createElement('div');
+    row.className = 'service-row flex gap-3 mb-3';
+    row.innerHTML = `
+      <input type="text" class="flex-1 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3" placeholder="Service name"/>
+      <input type="number" class="w-32 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 text-right" value="0" onchange="calculateTotal()"/>
+      <button onclick="removeService(this)" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash"></i></button>
+    `;
+    container.appendChild(row);
+    calculateTotal();
+  }
+
+  function removeService(el) {
+    el.parentElement.remove();
+    calculateTotal();
+  }
+
+  function selectPayment(btn) {
+    document.querySelectorAll('.payment-btn').forEach(b => b.classList.remove('active', 'border-teal-600', 'text-teal-600'));
+    btn.classList.add('active', 'border-teal-600', 'text-teal-600');
+  }
+
+  function generateReceipt() {
+    const name = document.getElementById('patient-name').value || "Patient Name";
+    const total = document.getElementById('total-amount').textContent;
+
+    const receiptHTML = `
+      <div class="text-center border-b pb-6 mb-6">
+        <div class="flex justify-center items-center gap-3 mb-2">
+          <div class="w-12 h-12 bg-teal-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold">M</div>
+          <div>
+            <h1 class="text-2xl font-bold text-teal-600">City General Hospital</h1>
+            <p class="text-xs text-gray-500">Hyderabad, Telangana</p>
+          </div>
+        </div>
+        <p class="text-sm text-gray-500">Outpatient Receipt</p>
+      </div>
+      
+      <div class="grid grid-cols-2 text-sm mb-6">
+        <div>
+          <p><strong>Patient:</strong> ${name}</p>
+          <p><strong>Phone:</strong> ${document.getElementById('patient-phone').value || 'N/A'}</p>
+        </div>
+        <div class="text-right">
+          <p><strong>Date:</strong> ${new Date().toLocaleDateString('en-IN')}</p>
+          <p><strong>Receipt ID:</strong> MR-${new Date().getFullYear()}${(new Date().getMonth()+1).toString().padStart(2,'0')}${new Date().getDate()}-00${Math.floor(Math.random()*100)}</p>
+        </div>
+      </div>
+
+      <table class="w-full mb-8 text-sm">
+        <thead>
+          <tr class="border-b">
+            <th class="text-left py-2">Description</th>
+            <th class="text-right py-2">Amount</th>
+          </tr>
+        </thead>
+        <tbody id="modal-services"></tbody>
+      </table>
+
+      <div class="flex justify-between text-xl font-bold border-t pt-6">
+        <span>Total</span>
+        <span class="text-teal-600">${total}</span>
+      </div>
+
+      <div class="text-center mt-8 text-xs text-gray-500">
+        Thank you for choosing City General Hospital<br>
+        QR Code for verification
+      </div>
+    `;
+
+    document.getElementById('receipt-content').innerHTML = receiptHTML;
+    document.getElementById('receipt-modal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('receipt-modal').classList.add('hidden');
+  }
+
+  function printReceipt() {
+    window.print();
+  }
+
+  function clearForm() {
+    document.getElementById('patient-name').value = '';
+    document.getElementById('patient-age').value = '';
+    document.getElementById('patient-phone').value = '';
+    calculateTotal();
+  }
+
+  function toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
+
+  // Sample records for Patient Records screen
+  function loadSampleRecords() {
+    const tbody = document.getElementById('records-body');
+    tbody.innerHTML = `
+      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+        <td class="px-6 py-5">MR-20260406-089</td>
+        <td class="px-6 py-5">Rahul Verma</td>
+        <td class="px-6 py-5">06 Apr 2026</td>
+        <td class="px-6 py-5 font-medium">₹850</td>
+        <td class="px-6 py-5"><span class="bg-emerald-100 text-emerald-700 px-4 py-1 rounded-full text-xs">Paid</span></td>
+        <td class="px-6 py-5 text-center">
+          <button onclick="alert('Opening receipt...')" class="text-teal-600 hover:underline">View</button>
+        </td>
+      </tr>
+      <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+        <td class="px-6 py-5">MR-20260406-088</td>
+        <td class="px-6 py-5">Ananya Reddy</td>
+        <td class="px-6 py-5">06 Apr 2026</td>
+        <td class="px-6 py-5 font-medium">₹1,250</td>
+        <td class="px-6 py-5"><span class="bg-emerald-100 text-emerald-700 px-4 py-1 rounded-full text-xs">Paid</span></td>
+        <td class="px-6 py-5 text-center">
+          <button onclick="alert('Opening receipt...')" class="text-teal-600 hover:underline">View</button>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Initialize
+  window.onload = () => {
+    // Set current date
+    const dateEl = document.getElementById('current-date');
+    dateEl.textContent = new Date().toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+
+    loadSampleRecords();
+    calculateTotal();
+    showScreen(0); // Start on Dashboard
+
+    // Auto calculate on any change
+    setTimeout(() => {
+      document.querySelectorAll('input[type="number"]').forEach(inp => {
+        inp.addEventListener('input', calculateTotal);
+      });
+    }, 500);
+  };
+</script>
+<link rel="stylesheet" href="app.js" />
+</body>
+</html>
